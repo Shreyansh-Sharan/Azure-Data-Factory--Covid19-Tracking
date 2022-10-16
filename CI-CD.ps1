@@ -1,4 +1,4 @@
-<#
+<# test the main code
 .SYNOPSIS
     Stop/ start triggers during release process (CICD)
 .DESCRIPTION
