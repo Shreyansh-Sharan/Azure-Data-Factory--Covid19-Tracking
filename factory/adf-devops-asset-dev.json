@@ -1,0 +1,9 @@
+{
+	"name": "adf-devops-asset-dev",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "cc715d87-4ac9-4787-810f-be884d02d077",
+		"tenantId": "5c979e27-0063-4697-891c-ba85b3eddf83"
+	}
+}
