@@ -1,18 +1,11 @@
 {
-	"name": "pl_ingest_population_data",
+	"name": "pl_ingest_github_data",
 	"properties": {
 		"activities": [
 			{
-				"name": "Check Number of Rows",
-				"type": "GetMetadata",
-				"dependsOn": [
-					{
-						"activity": "File Exists",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"name": "Fetch_Filename",
+				"type": "Lookup",
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -22,29 +15,30 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
 					"dataset": {
-						"referenceName": "ds_population_source_compressed",
+						"referenceName": "ds_gihub_json_config",
 						"type": "DatasetReference"
 					},
-					"fieldList": [
-						"columnCount"
-					],
-					"storeSettings": {
-						"type": "AzureBlobFSReadSettings",
-						"recursive": true,
-						"enablePartitionDiscovery": false
-					},
-					"formatSettings": {
-						"type": "DelimitedTextReadSettings"
-					}
+					"firstRowOnly": false
 				}
 			},
 			{
-				"name": "File Sanity",
-				"type": "IfCondition",
+				"name": "ForEach1",
+				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Check Number of Rows",
+						"activity": "Fetch_Filename",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -52,13 +46,14 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"expression": {
-						"value": "@equals(activity('Check Number of Rows').output.columnCount,13)",
+					"items": {
+						"value": "@activity('Fetch_Filename').output.value",
 						"type": "Expression"
 					},
-					"ifTrueActivities": [
+					"isSequential": true,
+					"activities": [
 						{
-							"name": "Copy Population Data",
+							"name": "Copy ECDC Data",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
@@ -73,9 +68,8 @@
 								"source": {
 									"type": "DelimitedTextSource",
 									"storeSettings": {
-										"type": "AzureBlobFSReadSettings",
-										"recursive": true,
-										"enablePartitionDiscovery": false
+										"type": "HttpReadSettings",
+										"requestMethod": "GET"
 									},
 									"formatSettings": {
 										"type": "DelimitedTextReadSettings"
@@ -104,40 +98,36 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "ds_population_source_compressed",
-									"type": "DatasetReference"
+									"referenceName": "ds_Github_Data",
+									"type": "DatasetReference",
+									"parameters": {
+										"relativeURL": {
+											"value": "@item().sourceRelativeURL",
+											"type": "Expression"
+										}
+									}
 								}
 							],
 							"outputs": [
 								{
-									"referenceName": "ds_population_destination_compressed",
-									"type": "DatasetReference"
+									"referenceName": "ds_cases_death_destination_compressed",
+									"type": "DatasetReference",
+									"parameters": {
+										"sinkFileName": {
+											"value": "@item().sinkFileName",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						}
 					]
-				}
-			},
-			{
-				"name": "File Exists",
-				"type": "Validation",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"dataset": {
-						"referenceName": "ds_population_source_compressed",
-						"type": "DatasetReference"
-					},
-					"timeout": "0.12:00:00",
-					"sleep": 10
 				}
 			}
 		],
 		"folder": {
 			"name": "Covid Reporting Pipeline"
 		},
-		"annotations": [],
-		"lastPublishTime": "2022-10-14T11:56:09Z"
-	},
-	"type": "Microsoft.DataFactory/factories/pipelines"
+		"annotations": []
+	}
 }
