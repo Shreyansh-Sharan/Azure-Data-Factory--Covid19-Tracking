@@ -1,0 +1,29 @@
+{
+	"name": "tr_ingest_github_data",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_ingest_github_data",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"par_relativeURL": "Shreyansh-Sharan/Azure-Data-Factory--Covid19-Tracking/main/Data/hospital_admissions.csv",
+					"par_sinkFileName": "hospital_admissions.csv"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2022-10-17T15:00:00",
+				"endTime": "2022-10-19T00:43:00",
+				"timeZone": "India Standard Time"
+			}
+		}
+	}
+}

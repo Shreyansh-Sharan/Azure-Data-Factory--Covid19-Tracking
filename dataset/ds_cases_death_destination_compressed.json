@@ -1,9 +1,14 @@
 {
-	"name": "ds_population_destination_compressed",
+	"name": "ds_cases_death_destination_compressed",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_adls_devopsasset_dev",
 			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"sinkFileName": {
+				"type": "string"
+			}
 		},
 		"folder": {
 			"name": "covid reporting"
@@ -13,26 +18,24 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "population_by_age.tsv.gz",
+				"fileName": {
+					"value": "@dataset().sinkFileName",
+					"type": "Expression"
+				},
 				"folderPath": {
 					"value": "RawData_Content",
 					"type": "Expression"
 				},
 				"fileSystem": "data-factory-data-source"
 			},
-			"columnDelimiter": "\t",
-			"compressionCodec": "gzip",
+			"columnDelimiter": ",",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
 		"schema": [
 			{
-				"name": "\u001f�\b\bHK�^\u0000\u0003tps00010.tsv\u0000�\\ێ�H�}�~E~�� ����ۖ�B�l��j��\u0002\u0006�c",
-				"type": "String"
-			},
-			{
-				"name": "�aw����U���8��jz�m�p$Q�ɸg0�������\u001f?���o�������_�\u000e]��!ᒰm\u0004[�N0",
+				"name": "Prop_0\tProp_1\tProp_2\tProp_3\tProp_4\tProp_5\tProp_6\tProp_7\tProp_8",
 				"type": "String"
 			}
 		]
