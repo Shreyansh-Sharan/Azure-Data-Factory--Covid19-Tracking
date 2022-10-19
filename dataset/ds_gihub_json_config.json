@@ -5,6 +5,9 @@
 			"referenceName": "ls_adls_devopsasset_dev",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "covid reporting"
+		},
 		"annotations": [],
 		"type": "Json",
 		"typeProperties": {
