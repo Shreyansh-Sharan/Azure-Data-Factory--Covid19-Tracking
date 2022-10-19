@@ -1,0 +1,23 @@
+{
+	"name": "ds_dataflow_sink_dataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adls_devopsasset_dev",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "processed/cases_death",
+				"fileSystem": "data-factory-data-target"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
