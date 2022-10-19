@@ -1,0 +1,20 @@
+{
+	"name": "ds_Hospital_admission_weekly",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adls_devopsasset_dev",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Hospital_Admission/Weekly",
+				"fileSystem": "data-factory-data-target"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
